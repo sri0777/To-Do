@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-do</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form>
+      <div>
+        <input type="text" id="inp" />
+        <button id="submit">Submit</button>
+      </div>
+      <section id="to-do"></section>
+    </form>
+  </body>
+  <script>
+    const mainToDo = document.getElementById("to-do");
+    const inputVal = document.getElementById("inp");
+    document.getElementById("submit").addEventListener("click", (e) => {
+      addtolist(e);
+    });
+    const getTodoList = () => {
+      return JSON.parse(localStorage.getItem("key"));
+    };
+    const listarray = getTodoList() || [];
+    const addtoDynamicEle = (e)=>{
+      const mainDiv = document.createElement("div");
+      mainDiv.classList.add("mainDivcls");
+      mainDiv.innerHTML = `<li> ${e} </li> <button class="dltbtn"> Delete </button>`;
+      mainToDo.append(mainDiv);
+    }
+    
+    const addtolist = (e) => {
+      e.preventDefault();
+      
+      const todoListValue = `${inputVal.value.trim()}`;
+      listarray.push(todoListValue);
+      localStorage.setItem("key", JSON.stringify(listarray));
+      console.log(listarray);
+      if(todoListValue!="" &&!listarray.includes(todoListValue)){  //for printing unique data
+      const mainDiv = document.createElement("div");
+      mainDiv.classList.add("mainDivcls");
+      mainDiv.innerHTML = `<li> ${inputVal.value} </li> <button class="dltbtn"> Delete </button>`;
+      console.log(`${inputVal.value}`);
+      mainToDo.append(mainDiv);
+    }
+    //addtoDynamicEle(todoListValue)
+  };
+  const showlist = () => {
+    console.log(listarray);
+    listarray.forEach((e) => {
+      addtoDynamicEle(e);
+    });
+  };
+  showlist();
+
+  mainToDo.addEventListener("click", (e) => {
+    e.preventDefault();
+    removeToDo(e);
+  });
+  removeToDo = (e) => {
+    if (e.target.classList.contains("dltbtn")) {
+      console.log(e.target); 
+      e.target.parentElement.remove();
+      const todo = e.target.parentElement.firstChild.innerText;
+      console.log(todo);
+      const index = listarray.indexOf(todo);
+      listarray.splice(index, 1);
+      localStorage.setItem("key", JSON.stringify(listarray));
+    }
+  };
+  </script>
+</html>

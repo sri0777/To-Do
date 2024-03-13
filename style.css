@@ -1,0 +1,8 @@
+.mainDivcls{
+    width: 20rem;
+    display: grid;
+    height: auto;
+    grid-template-columns: 1fr 0.1fr;
+    align-items: center;
+    margin: 5px;
+}
